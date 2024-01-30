@@ -11,17 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('emotions', function (Blueprint $table) {
+        Schema::create('offers', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->string('type');
             $table->string('name');
             $table->integer('user_id');
-            $table->string('description');
+            $table->text('description');
             $table->string('image');
             $table->date('date');
-
+            $table->timestamps();
         });
+        
     }
 
     /**

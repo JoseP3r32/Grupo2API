@@ -5,8 +5,6 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\EmotionController;
-use App\Http\Controllers\API\UserController;
-
 
 Route::controller(RegisterController::class)->group(function(){
     Route::post('register', 'register');
@@ -14,8 +12,11 @@ Route::controller(RegisterController::class)->group(function(){
 });
 
 Route::middleware('auth:sanctum')->group( function () {
-
-    Route::get('/emotions', [EmotionController::class, 'index']);
+// La siguiente ruta devuelve las ofertas
+    Route::get('/emotions', [EmotionController::class, 'index']); 
 });
 
-Route::middleware('auth:sanctum')->resource('users', UserController::class);
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
