@@ -13,7 +13,7 @@ Route::controller(RegisterController::class)->group(function(){
     Route::post('login', 'login');
 });
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:api')->group(function () {
     Route::get('/emotions', [EmotionController::class, 'index']);
     Route::get('/users', [UserController::class, 'index']);
     Route::get('/users/{user}', [UserController::class, 'show']);
