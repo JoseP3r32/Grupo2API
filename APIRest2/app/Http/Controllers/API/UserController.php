@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\User;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\JsonResponse;
 
