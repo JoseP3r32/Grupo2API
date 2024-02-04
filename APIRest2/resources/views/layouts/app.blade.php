@@ -30,7 +30,12 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-
+                        <!-- Enlace para mostrar la lista de emociones -->
+                        @auth
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('emotions.index') }}">{{ __('Emotions') }}</a>
+                            </li>
+                        @endauth
                     </ul>
 
                     <!-- Right Side Of Navbar -->
