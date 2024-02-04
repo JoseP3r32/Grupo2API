@@ -8,6 +8,7 @@ use App\Models\Emotion;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\EmotionResource;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 
 class EmotionController extends BaseController
 {
@@ -16,7 +17,6 @@ class EmotionController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-
     public function index(): JsonResponse
     {
         $emotions = Emotion::all();
@@ -31,23 +31,30 @@ class EmotionController extends BaseController
      * @return \Illuminate\Http\Response
      */
 
+
     public function store(Request $request): JsonResponse
     {
-        $input = $request->all();
-
-        $validator = Validator::make($input, [
+        $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'description' => 'required'
+            'description' => 'required',
+            'date' => 'required|date',
+            'image' => 'required',
+            // No es necesario validar 'user_id' ya que podemos obtenerlo del usuario autenticado
         ]);
-
-        if($validator->fails()){
+    
+        if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
         }
-
+    
+        $input = $request->all();
+        // Obtenemos el ID del usuario autenticado
+        $input['user_id'] = Auth::id();
         $emotion = Emotion::create($input);
-
+    
         return $this->sendResponse(new EmotionResource($emotion), 'Emotion created successfully.');
     }
+    
+
 
     /**
      * Display the specified resource.
@@ -73,39 +80,37 @@ class EmotionController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-
     public function update(Request $request, Emotion $emotion): JsonResponse
     {
-        $input = $request->all();
-
-        $validator = Validator::make($input, [
+        $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'description' => 'required'
+            'description' => 'required',
+            'date' => 'required|date',
+            'image' => 'required',
+            'user_id' => 'required|exists:users,id',
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
         }
 
-        $emotion->name = $input['name'];
-        $emotion->description = $input['description'];
-        $emotion->save();
+        $emotion->update($request->all());
 
         return $this->sendResponse(new EmotionResource($emotion), 'Emotion updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
 
-    public function destroy(Emotion $emotion): JsonResponse
+    public function destroy($id): JsonResponse
     {
+        $emotion = Emotion::find($id);
+
+        if (is_null($emotion)) {
+        return $this->sendError('Emotion not found.');
+        }
+
         $emotion->delete();
 
         return $this->sendResponse([], 'Emotion deleted successfully.');
     }
-}
 
+}
