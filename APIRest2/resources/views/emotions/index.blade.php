@@ -21,7 +21,7 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            max-width: 600px;
+            max-width: 800px;
             width: 100%;
         }
 
@@ -48,6 +48,11 @@
         tr:hover {
             background-color: #f9f9f9;
         }
+
+        .emotion-image {
+            max-width: 100px;
+            max-height: 100px;
+        }
     </style>
 </head>
 <body>
@@ -59,6 +64,7 @@
                     <th>ID</th>
                     <th>Nombre</th>
                     <th>Descripción</th>
+                    <th>Imagen</th>
                 </tr>
             </thead>
             <tbody>
@@ -67,6 +73,13 @@
                         <td>{{ $emotion->id }}</td>
                         <td>{{ $emotion->name }}</td>
                         <td>{{ $emotion->description }}</td>
+                        <td>
+                            @if($emotion->image)
+                                <img src="{{ asset($emotion->image) }}" alt="Emotion Image" class="emotion-image">
+                            @else
+                                No image
+                            @endif
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
